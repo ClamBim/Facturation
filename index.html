@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atelier Pilotage — Ventes</title>
+  <meta name="description" content="Pilotage commercial : devis, factures, encaissements, relances et catalogue produits.">
+
+  <!-- Connexion a Supabase : renseigner assets/js/config.js (SUPABASE_URL, SUPABASE_ANON_KEY). -->
+
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/print.css" media="print">
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <div class="app-shell" id="appShell">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <p class="sidebar__title">Atelier Pilotage</p>
+        <p class="sidebar__subtitle">Gestion commerciale</p>
+      </div>
+
+      <div class="sidebar__context">
+        <label class="field field--compact" for="companySelect">
+          <span class="field__label">Societe active</span>
+          <select id="companySelect" class="input"></select>
+        </label>
+        <p class="sidebar__user" id="sidebarUser"></p>
+      </div>
+
+      <nav class="sidebar__nav" id="mainNav" aria-label="Navigation principale"></nav>
+
+      <div class="sidebar__footer">
+        <button type="button" class="btn btn--ghost btn--block" id="themeToggle" aria-pressed="false">
+          <span aria-hidden="true">◐</span> Theme
+        </button>
+        <button type="button" class="btn btn--ghost btn--block" id="logoutButton" hidden>Se deconnecter</button>
+        <p class="sidebar__status" id="apiStatus" role="status">Connexion…</p>
+      </div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <button type="button" class="icon-btn topbar__burger" id="navToggle" aria-label="Afficher le menu" aria-expanded="false">☰</button>
+        <div class="topbar__heading">
+          <h1 id="pageTitle">Chargement…</h1>
+          <p class="topbar__subtitle" id="pageSubtitle"></p>
+        </div>
+        <div class="topbar__actions" id="pageActions"></div>
+      </header>
+
+      <main id="contenu" class="content" tabindex="-1">
+        <div class="loader" id="bootLoader"><span class="spinner" aria-hidden="true"></span> Chargement des donnees…</div>
+        <noscript><p class="banner" data-tone="danger">JavaScript est desactive : l application ne peut pas demarrer.</p></noscript>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-host" id="modalHost" hidden></div>
+  <div class="toast-host" id="toastHost" aria-live="polite" aria-atomic="false"></div>
+  <div class="print-host" id="printHost" aria-hidden="true"></div>
+
+  <!-- Garde-fou : explique pourquoi l application ne demarre pas (ouverture en file://,
+       serveur qui ne sert pas les modules JS, navigateur trop ancien). -->
+  <script>
+    (function () {
+      var main = document.getElementById('contenu');
+      function explain(title, lines) {
+        var card = document.createElement('div');
+        card.className = 'card';
+        var body = document.createElement('div');
+        body.className = 'card__body';
+        var h = document.createElement('h2');
+        h.className = 'card__title';
+        h.textContent = title;
+        body.appendChild(h);
+        lines.forEach(function (line) {
+          var p = document.createElement('p');
+          p.textContent = line;
+          body.appendChild(p);
+        });
+        card.appendChild(body);
+        main.innerHTML = '';
+        main.appendChild(card);
+        document.getElementById('pageTitle').textContent = 'Atelier Pilotage';
+      }
+      if (window.location.protocol === 'file:') {
+        explain('Ouverture directe du fichier impossible', [
+          'Le fichier index.html a ete ouvert depuis le disque (adresse commencant par file://). Les navigateurs bloquent alors le chargement des modules JavaScript et des donnees.',
+          'Publiez le dossier sur GitHub Pages (ou tout hebergement web) et ouvrez-le par son adresse https, ou lancez un petit serveur local : double-cliquez sur lancer-en-local.bat (Windows) ou lancer-en-local.command (macOS).'
+        ]);
+        return;
+      }
+      window.setTimeout(function () {
+        if (window.__atelierBooted) return;
+        explain('L application n a pas demarre', [
+          'Le script principal (assets/js/main.js) n a pas pu etre execute apres 8 secondes.',
+          'Verifiez dans la console du navigateur (touche F12, onglet Console) le message d erreur : fichier introuvable (404), type MIME incorrect pour les fichiers .js, ou navigateur trop ancien (Chrome, Edge, Firefox ou Safari recents requis).',
+          'Verifiez aussi que le dossier assets/ a bien ete copie en entier avec index.html.'
+        ]);
+      }, 8000);
+    })();
+  </script>
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
